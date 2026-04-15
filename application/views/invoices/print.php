@@ -8,6 +8,16 @@ $company_address = trim(
     setting_value($app_settings, 'company_postal_code', '')
 );
 $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
+$collector_name = setting_value($app_settings, 'collector_name', $company_name);
+$collector_title = setting_value($app_settings, 'collector_title', 'Finance & Billing Officer');
+$billed_company = !empty($client['company_name']) ? $client['company_name'] : $client['name'];
+$verification_payload = "Invoice Verification\n"
+    . "Penerbit: {$company_name}\n"
+    . "Ditagihkan ke: {$billed_company}\n"
+    . "Nomor Invoice: {$invoice['invoice_number']}\n"
+    . "Tanggal Terbit: " . app_date($invoice['invoice_date']) . "\n"
+    . "Jatuh Tempo: " . app_date($invoice['due_date']) . "\n"
+    . "Penagih: {$collector_name} ({$collector_title})";
 ?>
 <!doctype html>
 <html lang="en">
@@ -206,32 +216,35 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
             margin-bottom: 6px;
         }
 
-        .summary-strip {
+        .meta-list {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr;
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
-        .summary-item {
+        .meta-row {
             border: 1px solid var(--line);
             border-radius: 12px;
-            padding: 10px 11px;
+            padding: 9px 11px;
             background: #fbfcfe;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: baseline;
         }
 
-        .summary-item span {
-            display: block;
+        .meta-row span {
             color: var(--muted);
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 5px;
         }
 
-        .summary-item strong {
-            font-size: 14px;
+        .meta-row strong {
+            font-size: 11px;
             line-height: 1.2;
+            text-align: right;
         }
 
         table {
@@ -285,7 +298,8 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
 
         .notes-card,
         .totals-card,
-        .bank-card {
+        .bank-card,
+        .trust-card {
             border: 1px solid var(--line);
             border-radius: 14px;
             padding: 14px 16px;
@@ -293,7 +307,8 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
 
         .notes-card h3,
         .totals-card h3,
-        .bank-card h3 {
+        .bank-card h3,
+        .trust-card h3 {
             margin: 0 0 9px;
             font-size: 10px;
             letter-spacing: 0.14em;
@@ -302,12 +317,52 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .notes-card p,
-        .bank-card p {
+        .bank-card p,
+        .trust-card p {
             margin: 0;
             color: #344054;
             font-size: 11px;
             line-height: 1.55;
             white-space: pre-line;
+        }
+
+        .signatory {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--line-strong);
+            display: grid;
+            grid-template-columns: 1fr 92px;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .sign-name {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .sign-role {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        .qr-box {
+            width: 92px;
+            height: 92px;
+            border: 1px solid var(--line-strong);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .qr-box canvas,
+        .qr-box img {
+            width: 80px !important;
+            height: 80px !important;
         }
 
         .totals-table td {
@@ -411,7 +466,7 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
             <section class="info-grid">
                 <div class="info-card">
                     <h3>Bill To</h3>
-                    <div class="bill-name"><?= html_escape($client['company_name'] ?: $client['name']); ?></div>
+                    <div class="bill-name"><?= html_escape($billed_company); ?></div>
                     <div class="small-meta"><?= html_escape($client['name']); ?><br>
                         <?= html_escape($client['address'] ?? ''); ?><br>
                         <?= html_escape($client['city'] ?? ''); ?><br>
@@ -419,19 +474,23 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
                     </div>
                 </div>
                 <div class="info-card">
-                    <h3>Payment Snapshot</h3>
-                    <div class="summary-strip">
-                        <div class="summary-item">
-                            <span>Total Invoice</span>
-                            <strong><?= app_currency($invoice['total']); ?></strong>
+                    <h3>Invoice Reference</h3>
+                    <div class="meta-list">
+                        <div class="meta-row">
+                            <span>Nomor Invoice</span>
+                            <strong><?= html_escape($invoice['invoice_number']); ?></strong>
                         </div>
-                        <div class="summary-item">
-                            <span>Paid</span>
-                            <strong><?= app_currency($invoice['paid_amount']); ?></strong>
+                        <div class="meta-row">
+                            <span>Tanggal Terbit</span>
+                            <strong><?= app_date($invoice['invoice_date']); ?></strong>
                         </div>
-                        <div class="summary-item">
-                            <span>Balance</span>
-                            <strong><?= app_currency($balance_due); ?></strong>
+                        <div class="meta-row">
+                            <span>Jatuh Tempo</span>
+                            <strong><?= app_date($invoice['due_date']); ?></strong>
+                        </div>
+                        <div class="meta-row">
+                            <span>Status</span>
+                            <strong><?= strtoupper(html_escape($invoice['status'])); ?></strong>
                         </div>
                     </div>
                 </div>
@@ -500,10 +559,30 @@ Mohon cantumkan nomor invoice <?= html_escape($invoice['invoice_number']); ?> pa
                             <td><?= app_currency($invoice['tax_amount']); ?></td>
                         </tr>
                         <tr>
+                            <td>Paid</td>
+                            <td><?= app_currency($invoice['paid_amount']); ?></td>
+                        </tr>
+                        <tr>
+                            <td>Balance Due</td>
+                            <td><?= app_currency($balance_due); ?></td>
+                        </tr>
+                        <tr>
                             <td>Grand Total</td>
                             <td><?= app_currency($invoice['total']); ?></td>
                         </tr>
                     </table>
+
+                    <div class="trust-card" style="margin-top:14px;">
+                        <h3>Authorized Billing</h3>
+                        <p>Invoice ini diterbitkan resmi oleh <?= html_escape($company_name); ?> dan ditagihkan kepada <?= html_escape($billed_company); ?> pada tanggal <?= app_date($invoice['invoice_date']); ?>.</p>
+                        <div class="signatory">
+                            <div>
+                                <div class="sign-name"><?= html_escape($collector_name); ?></div>
+                                <div class="sign-role"><?= html_escape($collector_title); ?></div>
+                            </div>
+                            <div class="qr-box" id="invoice-qrcode"></div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -514,5 +593,23 @@ Mohon cantumkan nomor invoice <?= html_escape($invoice['invoice_number']); ?> pa
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+    (function () {
+        var target = document.getElementById('invoice-qrcode');
+        if (!target || typeof QRCode === 'undefined') {
+            return;
+        }
+
+        QRCode.toCanvas(target, <?= json_encode($verification_payload); ?>, {
+            width: 80,
+            margin: 0,
+            color: {
+                dark: '#152033',
+                light: '#ffffff'
+            }
+        });
+    })();
+</script>
 </body>
 </html>

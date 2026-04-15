@@ -42,6 +42,8 @@ CREATE TABLE IF NOT EXISTS mp_settings (
   bank_name VARCHAR(100) NULL,
   bank_account_number VARCHAR(50) NULL,
   bank_account_name VARCHAR(100) NULL,
+  collector_name VARCHAR(100) NULL,
+  collector_title VARCHAR(100) NULL,
   smtp_host VARCHAR(100) NULL,
   smtp_port INT NULL,
   smtp_username VARCHAR(100) NULL,
@@ -208,7 +210,7 @@ INSERT INTO mp_users (id, role_id, full_name, username, email, password, phone, 
 ON DUPLICATE KEY UPDATE full_name = VALUES(full_name), password = VALUES(password), is_active = VALUES(is_active);
 
 INSERT INTO mp_settings
-  (id, company_name, company_tagline, company_address, company_city, company_phone, company_email, invoice_prefix, quotation_prefix, default_payment_terms, bank_name, bank_account_number, bank_account_name, currency_symbol, currency_code)
+  (id, company_name, company_tagline, company_address, company_city, company_phone, company_email, invoice_prefix, quotation_prefix, default_payment_terms, bank_name, bank_account_number, bank_account_name, collector_name, collector_title, currency_symbol, currency_code)
 VALUES
-  (1, 'MoizPayment Demo', 'Invoice & Finance Management', 'Jl. Contoh No. 1', 'Jakarta', '021-555000', 'billing@moizpayment.test', 'INV/', 'QUO/', 14, 'Bank BCA', '1234567890', 'MoizPayment Demo', 'Rp', 'IDR')
+  (1, 'MoizPayment Demo', 'Invoice & Finance Management', 'Jl. Contoh No. 1', 'Jakarta', '021-555000', 'billing@moizpayment.test', 'INV/', 'QUO/', 14, 'Bank BCA', '1234567890', 'MoizPayment Demo', 'Finance Team', 'Finance & Billing Officer', 'Rp', 'IDR')
 ON DUPLICATE KEY UPDATE company_name = VALUES(company_name), company_email = VALUES(company_email);

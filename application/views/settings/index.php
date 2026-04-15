@@ -72,6 +72,14 @@
                 <label class="form-label">Atas Nama</label>
                 <input type="text" name="bank_account_name" class="form-control" value="<?= set_value('bank_account_name', $app_settings['bank_account_name'] ?? ''); ?>">
             </div>
+            <div class="col-md-6">
+                <label class="form-label">Nama Penagih / Penandatangan</label>
+                <input type="text" name="collector_name" class="form-control" value="<?= set_value('collector_name', $app_settings['collector_name'] ?? ''); ?>" placeholder="Mis. Muhammad Iqbal">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Jabatan Penagih</label>
+                <input type="text" name="collector_title" class="form-control" value="<?= set_value('collector_title', $app_settings['collector_title'] ?? ''); ?>" placeholder="Mis. Finance & Billing Officer">
+            </div>
             <div class="col-md-3">
                 <label class="form-label">SMTP Host</label>
                 <input type="text" name="smtp_host" class="form-control" value="<?= set_value('smtp_host', $app_settings['smtp_host'] ?? ''); ?>">

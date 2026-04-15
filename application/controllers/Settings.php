@@ -44,6 +44,8 @@ class Settings extends Authenticated_Controller
                     'bank_name' => $this->input->post('bank_name', TRUE),
                     'bank_account_number' => $this->input->post('bank_account_number', TRUE),
                     'bank_account_name' => $this->input->post('bank_account_name', TRUE),
+                    'collector_name' => $this->input->post('collector_name', TRUE),
+                    'collector_title' => $this->input->post('collector_title', TRUE),
                     'smtp_host' => $this->input->post('smtp_host', TRUE),
                     'smtp_port' => $this->input->post('smtp_port', TRUE),
                     'smtp_username' => $this->input->post('smtp_username', TRUE),
