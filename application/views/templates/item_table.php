@@ -1,6 +1,9 @@
 <div class="panel-card mt-4">
     <div class="panel-header">
-        <h2>Item Dokumen</h2>
+        <div>
+            <div class="section-kicker">Billing Lines</div>
+            <h2>Item Tagihan</h2>
+        </div>
         <button type="button" class="btn btn-outline-light btn-sm" id="add-item-row">Tambah Baris</button>
     </div>
     <div class="table-responsive">

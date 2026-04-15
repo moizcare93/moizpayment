@@ -161,12 +161,92 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.form-control::placeholder,
+textarea.form-control::placeholder {
+    color: rgba(236, 242, 255, 0.45);
+}
+
+.form-select option {
+    color: #101828;
+    background: #ffffff;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background: #f4f7fb;
+    color: #162033;
+    border-color: #d5deeb;
+    opacity: 1;
+    font-weight: 700;
+}
+
 .form-control:focus,
 .form-select:focus {
     background: rgba(255, 255, 255, 0.08);
     color: #fff;
     border-color: rgba(13, 110, 253, 0.5);
     box-shadow: none;
+}
+
+.form-control-strong,
+.form-select.form-control-strong {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(145, 174, 255, 0.25);
+}
+
+.form-label {
+    color: #d9e4ff;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.invoice-form-shell,
+.form-section {
+    display: grid;
+    gap: 18px;
+}
+
+.section-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.section-head h3 {
+    margin: 4px 0 0;
+    font-size: 1.05rem;
+}
+
+.section-kicker {
+    color: #88a8ff;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.section-note {
+    max-width: 380px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.invoice-submit-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+}
+
+.submit-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-lg {
+    padding-inline: 24px;
 }
 
 .auth-body {
@@ -214,7 +294,9 @@ body {
 
     .summary-box,
     .topbar,
-    .panel-header {
+    .panel-header,
+    .section-head,
+    .invoice-submit-bar {
         flex-direction: column;
         align-items: stretch;
     }

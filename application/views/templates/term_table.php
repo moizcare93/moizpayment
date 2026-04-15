@@ -1,6 +1,9 @@
 <div class="panel-card mt-4">
     <div class="panel-header">
-        <h2>Skema Termin Pembayaran</h2>
+        <div>
+            <div class="section-kicker">Payment Schedule</div>
+            <h2>Skema Termin Pembayaran</h2>
+        </div>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-outline-light btn-sm" id="fill-single-term">Isi Full Total</button>
             <button type="button" class="btn btn-outline-light btn-sm" id="add-term-row">Tambah Termin</button>
