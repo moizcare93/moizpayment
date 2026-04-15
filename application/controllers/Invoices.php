@@ -40,6 +40,21 @@ class Invoices extends Authenticated_Controller
         ));
     }
 
+    public function printable($id)
+    {
+        $invoice = $this->Invoice_model->find($id);
+        if (!$invoice) {
+            show_404();
+        }
+
+        $client = $this->Client_model->find($invoice['client_id']);
+        $this->load->view('invoices/print', array(
+            'invoice' => $invoice,
+            'client' => $client,
+            'app_settings' => $this->data['app_settings'],
+        ));
+    }
+
     private function save($id = NULL)
     {
         $invoice = $id ? $this->Invoice_model->find($id) : NULL;

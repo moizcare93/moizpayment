@@ -5,7 +5,7 @@
                 <h2><?= html_escape($invoice['invoice_number']); ?></h2>
                 <div class="d-flex gap-2">
                     <a class="btn btn-outline-light" href="<?= site_url('invoices/edit/' . $invoice['id']); ?>">Edit</a>
-                    <button class="btn btn-outline-light" onclick="window.print()">Print</button>
+                    <a class="btn btn-outline-light" href="<?= site_url('invoices/print/' . $invoice['id']); ?>" target="_blank">Print</a>
                 </div>
             </div>
             <div class="detail-block mb-4">

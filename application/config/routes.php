@@ -74,6 +74,7 @@ $route['invoices'] = 'invoices/index';
 $route['invoices/create'] = 'invoices/create';
 $route['invoices/edit/(:num)'] = 'invoices/edit/$1';
 $route['invoices/view/(:num)'] = 'invoices/view/$1';
+$route['invoices/print/(:num)'] = 'invoices/printable/$1';
 $route['invoices/delete/(:num)'] = 'invoices/delete/$1';
 $route['invoices/payment/(:num)'] = 'invoices/add_payment/$1';
 
