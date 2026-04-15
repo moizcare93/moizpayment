@@ -47,6 +47,23 @@
         }
     }
 
+    function recalculateTermAmountsFromPercent() {
+        const grandTotal = getGrandTotalNumeric();
+        document.querySelectorAll('#term-table tbody tr').forEach(function (row) {
+            const percentField = row.querySelector('.term-percent');
+            const amountField = row.querySelector('.term-amount');
+            if (!percentField || !amountField) {
+                return;
+            }
+
+            const percent = parseFloat(percentField.value || 0);
+            if (percent > 0) {
+                amountField.value = ((grandTotal * percent) / 100).toFixed(2);
+            }
+        });
+        calculateTermTotals();
+    }
+
     function getGrandTotalNumeric() {
         let subtotal = 0;
         document.querySelectorAll('#item-table tbody tr').forEach(function (row) {
@@ -74,6 +91,10 @@
         }
 
         fields[0].value = getGrandTotalNumeric().toFixed(2);
+        const percentField = fields[0].closest('tr')?.querySelector('.term-percent');
+        if (percentField) {
+            percentField.value = '';
+        }
         calculateTermTotals();
     }
 
@@ -116,6 +137,7 @@
             row.innerHTML = `
                 <td><input type="text" name="terms_schedule[${index}][term_label]" class="form-control" placeholder="DP 1 / Termin 2 / Pelunasan"></td>
                 <td><input type="date" name="terms_schedule[${index}][due_date]" class="form-control" value="${dueDate}"></td>
+                <td><input type="number" step="0.01" name="terms_schedule[${index}][percent]" class="form-control term-percent" placeholder="50"></td>
                 <td><input type="number" step="0.01" name="terms_schedule[${index}][amount]" class="form-control term-amount" value="0"></td>
                 <td><input type="text" name="terms_schedule[${index}][notes]" class="form-control" placeholder="Catatan termin"></td>
                 <td><button type="button" class="btn btn-outline-danger btn-sm remove-term-row">X</button></td>
@@ -139,7 +161,15 @@
             calculateDocumentTotals();
         }
 
+        if (event.target && event.target.classList.contains('term-percent')) {
+            recalculateTermAmountsFromPercent();
+        }
+
         if (event.target && event.target.classList.contains('term-amount')) {
+            const percentField = event.target.closest('tr')?.querySelector('.term-percent');
+            if (percentField) {
+                percentField.value = '';
+            }
             calculateTermTotals();
         }
     });
@@ -185,4 +215,5 @@
     calculateDocumentTotals();
     calculateTermTotals();
     fillSingleTermWithGrandTotal(false);
+    recalculateTermAmountsFromPercent();
 })();

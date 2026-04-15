@@ -147,13 +147,19 @@ class Invoice_model extends CI_Model
     {
         $normalized = array();
         foreach ((array) $terms as $index => $term) {
-            if (empty(trim($term['term_label'] ?? '')) && empty($term['amount'])) {
+            $percent = (float) ($term['percent'] ?? 0);
+            $amount = (float) ($term['amount'] ?? 0);
+            if ($percent > 0 && $invoice_total > 0) {
+                $amount = round(((float) $invoice_total * $percent) / 100, 2);
+            }
+
+            if (empty(trim($term['term_label'] ?? '')) && $amount <= 0) {
                 continue;
             }
 
             $normalized[] = array(
                 'term_label' => trim($term['term_label'] ?? ('Termin ' . ($index + 1))),
-                'amount' => (float) ($term['amount'] ?? 0),
+                'amount' => $amount,
                 'due_date' => !empty($term['due_date']) ? $term['due_date'] : $fallback_due_date,
                 'status' => 'pending',
                 'notes' => trim($term['notes'] ?? ''),

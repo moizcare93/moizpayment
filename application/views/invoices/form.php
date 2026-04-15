@@ -6,6 +6,7 @@ $terms = !empty($posted_terms)
     : ($invoice['terms'] ?? array(array(
         'term_label' => 'Pelunasan',
         'due_date' => $invoice['due_date'] ?? date('Y-m-d', strtotime('+14 days')),
+        'percent' => '',
         'amount' => $invoice['total'] ?? 0,
         'notes' => '',
     )));

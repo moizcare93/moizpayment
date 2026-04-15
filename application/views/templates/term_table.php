@@ -12,6 +12,7 @@
                 <tr>
                     <th>Label Termin</th>
                     <th>Jatuh Tempo</th>
+                    <th>%</th>
                     <th>Nominal Tagihan</th>
                     <th>Catatan</th>
                     <th></th>
@@ -22,6 +23,7 @@
                     <tr>
                         <td><input type="text" name="terms_schedule[<?= $index; ?>][term_label]" class="form-control" value="<?= html_escape($term['term_label'] ?? ''); ?>" placeholder="DP 1 / Termin 2 / Pelunasan"></td>
                         <td><input type="date" name="terms_schedule[<?= $index; ?>][due_date]" class="form-control" value="<?= html_escape($term['due_date'] ?? ''); ?>"></td>
+                        <td><input type="number" step="0.01" name="terms_schedule[<?= $index; ?>][percent]" class="form-control term-percent" value="<?= html_escape($term['percent'] ?? ''); ?>" placeholder="50"></td>
                         <td><input type="number" step="0.01" name="terms_schedule[<?= $index; ?>][amount]" class="form-control term-amount" value="<?= html_escape($term['amount'] ?? 0); ?>"></td>
                         <td><input type="text" name="terms_schedule[<?= $index; ?>][notes]" class="form-control" value="<?= html_escape($term['notes'] ?? ''); ?>" placeholder="Mis. DP saat PO terbit"></td>
                         <td><button type="button" class="btn btn-outline-danger btn-sm remove-term-row">X</button></td>
