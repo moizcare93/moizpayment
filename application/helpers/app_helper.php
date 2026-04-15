@@ -32,6 +32,7 @@ function invoice_status_badge($status)
         'approved' => 'success',
         'rejected' => 'danger',
         'expired' => 'dark',
+        'pending' => 'secondary',
     );
 
     return $map[$status] ?? 'secondary';

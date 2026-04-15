@@ -1,9 +1,23 @@
-<?php $items = $invoice['items'] ?? array(array('description' => '', 'qty' => 1, 'unit' => '', 'price' => 0, 'discount_percent' => 0)); ?>
+<?php
+$items = $invoice['items'] ?? array(array('description' => '', 'qty' => 1, 'unit' => '', 'price' => 0, 'discount_percent' => 0));
+$posted_terms = $this->input->post('terms_schedule');
+$terms = !empty($posted_terms)
+    ? $posted_terms
+    : ($invoice['terms'] ?? array(array(
+        'term_label' => 'Pelunasan',
+        'due_date' => $invoice['due_date'] ?? date('Y-m-d', strtotime('+14 days')),
+        'amount' => $invoice['total'] ?? 0,
+        'notes' => '',
+    )));
+?>
 <div class="panel-card">
     <div class="panel-header">
         <h2><?= html_escape($page_title ?? (isset($invoice) ? 'Edit Invoice' : 'Buat Invoice')); ?></h2>
         <a class="btn btn-outline-light" href="<?= site_url('invoices'); ?>">Kembali</a>
     </div>
+    <?php if (!empty($term_error)): ?>
+        <div class="alert alert-danger mt-3"><?= html_escape($term_error); ?></div>
+    <?php endif; ?>
     <?= form_open(); ?>
         <div class="row g-3">
             <div class="col-md-3">
@@ -39,6 +53,7 @@
         </div>
 
         <?php $this->load->view('templates/item_table', array('items' => $items)); ?>
+        <?php $this->load->view('templates/term_table', array('terms' => $terms)); ?>
 
         <div class="row g-3 mt-1">
             <div class="col-md-2">

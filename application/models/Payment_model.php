@@ -6,10 +6,11 @@ class Payment_model extends CI_Model
     public function all_income()
     {
         return $this->db
-            ->select('p.*, c.name AS client_name, i.invoice_number')
+            ->select('p.*, c.name AS client_name, i.invoice_number, t.term_label')
             ->from('mp_payments p')
             ->join('mp_clients c', 'c.id = p.client_id', 'left')
             ->join('mp_invoices i', 'i.id = p.invoice_id', 'left')
+            ->join('mp_invoice_terms t', 't.id = p.invoice_term_id', 'left')
             ->order_by('p.payment_date', 'DESC')
             ->get()
             ->result_array();

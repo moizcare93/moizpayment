@@ -141,10 +141,25 @@ CREATE TABLE IF NOT EXISTS mp_invoice_items (
   CONSTRAINT fk_invoice_items_header FOREIGN KEY (invoice_id) REFERENCES mp_invoices(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS mp_invoice_terms (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  invoice_id INT UNSIGNED NOT NULL,
+  term_label VARCHAR(100) NOT NULL,
+  amount DECIMAL(15,2) NOT NULL DEFAULT 0,
+  due_date DATE NOT NULL,
+  sort_order INT UNSIGNED NOT NULL DEFAULT 1,
+  status ENUM('pending','partial','paid','overdue') NOT NULL DEFAULT 'pending',
+  notes TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_invoice_terms_invoice FOREIGN KEY (invoice_id) REFERENCES mp_invoices(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS mp_payments (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   payment_code VARCHAR(50) NOT NULL,
   invoice_id INT UNSIGNED NULL,
+  invoice_term_id INT UNSIGNED NULL,
   client_id INT UNSIGNED NULL,
   category_id INT UNSIGNED NULL,
   amount DECIMAL(15,2) NOT NULL DEFAULT 0,
@@ -156,6 +171,7 @@ CREATE TABLE IF NOT EXISTS mp_payments (
   created_by INT UNSIGNED NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_payments_invoice FOREIGN KEY (invoice_id) REFERENCES mp_invoices(id) ON DELETE SET NULL,
+  CONSTRAINT fk_payments_invoice_term FOREIGN KEY (invoice_term_id) REFERENCES mp_invoice_terms(id) ON DELETE SET NULL,
   CONSTRAINT fk_payments_client FOREIGN KEY (client_id) REFERENCES mp_clients(id) ON DELETE SET NULL,
   CONSTRAINT fk_payments_user FOREIGN KEY (created_by) REFERENCES mp_users(id)
 );

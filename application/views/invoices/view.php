@@ -14,6 +14,7 @@
                 <div>Jatuh tempo: <?= app_date($invoice['due_date']); ?></div>
                 <div>Total: <?= app_currency($invoice['total']); ?></div>
                 <div>Terbayar: <?= app_currency($invoice['paid_amount']); ?></div>
+                <div>Sisa Tagihan: <?= app_currency($invoice['balance_due']); ?></div>
             </div>
             <div class="table-responsive">
                 <table class="table table-dark">
@@ -41,6 +42,43 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="panel-card mt-4">
+                <div class="panel-header">
+                    <h2>Jadwal Termin</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Termin</th>
+                                <th>Jatuh Tempo</th>
+                                <th>Nominal</th>
+                                <th>Terbayar</th>
+                                <th>Sisa</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($invoice['terms'] as $term): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?= html_escape($term['term_label']); ?></strong>
+                                        <?php if (!empty($term['notes'])): ?>
+                                            <div class="text-secondary small"><?= html_escape($term['notes']); ?></div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= app_date($term['due_date']); ?></td>
+                                    <td><?= app_currency($term['amount']); ?></td>
+                                    <td><?= app_currency($term['paid_amount']); ?></td>
+                                    <td><?= app_currency($term['remaining_amount']); ?></td>
+                                    <td><span class="badge text-bg-<?= invoice_status_badge($term['status']); ?>"><?= ucfirst($term['status']); ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-lg-4">
@@ -49,6 +87,15 @@
                 <h2>Input Pembayaran</h2>
             </div>
             <?= form_open('invoices/payment/' . $invoice['id']); ?>
+                <div class="mb-3">
+                    <label class="form-label">Termin</label>
+                    <select name="invoice_term_id" class="form-select">
+                        <option value="">Pembayaran umum invoice</option>
+                        <?php foreach ($invoice['terms'] as $term): ?>
+                            <option value="<?= $term['id']; ?>"><?= html_escape($term['term_label']); ?> - <?= app_currency($term['remaining_amount']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Nominal</label>
                     <input type="number" step="0.01" name="amount" class="form-control" required>
@@ -82,6 +129,9 @@
                     <div class="list-group-item bg-transparent text-white border-secondary">
                         <strong><?= app_currency($payment['amount']); ?></strong>
                         <div><?= app_date($payment['payment_date']); ?> · <?= html_escape($payment['payment_method']); ?></div>
+                        <?php if (!empty($payment['term_label'])): ?>
+                            <small class="d-block"><?= html_escape($payment['term_label']); ?></small>
+                        <?php endif; ?>
                         <small><?= html_escape($payment['reference_number']); ?></small>
                     </div>
                 <?php endforeach; ?>

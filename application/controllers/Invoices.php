@@ -58,6 +58,7 @@ class Invoices extends Authenticated_Controller
     private function save($id = NULL)
     {
         $invoice = $id ? $this->Invoice_model->find($id) : NULL;
+        $term_error = NULL;
         if ($id && !$invoice) {
             show_404();
         }
@@ -68,16 +69,20 @@ class Invoices extends Authenticated_Controller
             $this->form_validation->set_rules('due_date', 'Jatuh Tempo', 'required');
 
             if ($this->form_validation->run()) {
-                list($header, $items) = $this->build_payload($invoice['invoice_number'] ?? NULL);
-                $invoice_id = $this->Invoice_model->save($header, $items, $id);
-                $this->session->set_flashdata('success', 'Invoice berhasil disimpan.');
-                redirect('invoices/view/' . $invoice_id);
+                list($header, $items, $terms) = $this->build_payload($invoice['invoice_number'] ?? NULL);
+                $term_error = $this->Invoice_model->validate_terms($terms, $header['total']);
+                if ($term_error === NULL) {
+                    $invoice_id = $this->Invoice_model->save($header, $items, $terms, $id);
+                    $this->session->set_flashdata('success', 'Invoice berhasil disimpan.');
+                    redirect('invoices/view/' . $invoice_id);
+                }
             }
         }
 
         $this->render('invoices/form', array(
             'page_title' => $id ? 'Edit Invoice' : 'Buat Invoice',
             'invoice' => $invoice,
+            'term_error' => $term_error,
             'clients' => $this->Client_model->all(),
             'quotations' => $this->Quotation_model->all(),
             'next_number' => $invoice['invoice_number'] ?? $this->Invoice_model->next_number(setting_value($this->data['app_settings'], 'invoice_prefix', 'INV/')),
@@ -99,6 +104,7 @@ class Invoices extends Authenticated_Controller
                 $this->Invoice_model->add_payment(array(
                     'payment_code' => 'PAY-' . date('YmdHis'),
                     'invoice_id' => $id,
+                    'invoice_term_id' => $this->input->post('invoice_term_id') ?: NULL,
                     'client_id' => $invoice['client_id'],
                     'category_id' => NULL,
                     'amount' => (float) $this->input->post('amount'),
@@ -154,6 +160,12 @@ class Invoices extends Authenticated_Controller
         $tax_amount = $tax_base * $tax_percent / 100;
         $total = $tax_base + $tax_amount;
 
+        $terms = $this->Invoice_model->normalize_terms(
+            $this->input->post('terms_schedule'),
+            $total,
+            $this->input->post('due_date', TRUE)
+        );
+
         return array(
             array(
                 'invoice_number' => $existing_number ?: $this->Invoice_model->next_number(setting_value($this->data['app_settings'], 'invoice_prefix', 'INV/')),
@@ -173,6 +185,7 @@ class Invoices extends Authenticated_Controller
                 'created_by' => $this->data['current_user']['id'],
             ),
             $items,
+            $terms,
         );
     }
 }

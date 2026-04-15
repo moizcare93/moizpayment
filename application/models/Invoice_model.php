@@ -38,9 +38,14 @@ class Invoice_model extends CI_Model
             ->result_array();
 
         $invoice['payments'] = $this->db
+            ->select('p.*, t.term_label')
             ->order_by('payment_date', 'DESC')
-            ->get_where('mp_payments', array('invoice_id' => $id))
+            ->join('mp_invoice_terms t', 't.id = p.invoice_term_id', 'left')
+            ->get_where('mp_payments p', array('p.invoice_id' => $id))
             ->result_array();
+
+        $invoice['terms'] = $this->get_terms($id);
+        $invoice['balance_due'] = (float) $invoice['total'] - (float) $invoice['paid_amount'];
 
         $invoice['status'] = $this->normalize_status($invoice);
 
@@ -55,13 +60,14 @@ class Invoice_model extends CI_Model
         return document_number($prefix, $last_number);
     }
 
-    public function save($header, $items, $id = NULL)
+    public function save($header, $items, $terms, $id = NULL)
     {
         $this->db->trans_start();
 
         if ($id) {
             $this->db->where('id', $id)->update('mp_invoices', $header);
             $this->db->delete('mp_invoice_items', array('invoice_id' => $id));
+            $this->db->delete('mp_invoice_terms', array('invoice_id' => $id));
         } else {
             $this->db->insert('mp_invoices', $header);
             $id = $this->db->insert_id();
@@ -72,7 +78,15 @@ class Invoice_model extends CI_Model
             $this->db->insert('mp_invoice_items', $item);
         }
 
+        $order = 1;
+        foreach ($terms as $term) {
+            $term['invoice_id'] = $id;
+            $term['sort_order'] = $order++;
+            $this->db->insert('mp_invoice_terms', $term);
+        }
+
         $this->db->trans_complete();
+        $this->refresh_paid_amount($id);
         return $id;
     }
 
@@ -87,6 +101,7 @@ class Invoice_model extends CI_Model
     public function delete($id)
     {
         $this->db->delete('mp_invoice_items', array('invoice_id' => $id));
+        $this->db->delete('mp_invoice_terms', array('invoice_id' => $id));
         $this->db->delete('mp_payments', array('invoice_id' => $id));
         return $this->db->delete('mp_invoices', array('id' => $id));
     }
@@ -105,39 +120,153 @@ class Invoice_model extends CI_Model
             return;
         }
 
-        $status = 'sent';
-        if ($paid_amount >= (float) $invoice['total'] && $invoice['total'] > 0) {
-            $status = 'paid';
-        } elseif ($paid_amount > 0) {
-            $status = 'partial';
-        } elseif (!empty($invoice['due_date']) && strtotime($invoice['due_date']) < strtotime(date('Y-m-d'))) {
-            $status = 'overdue';
-        } elseif (!empty($invoice['status']) && $invoice['status'] === 'draft') {
-            $status = 'draft';
-        }
+        $status = $this->derive_invoice_status($invoice, $paid_amount);
 
         $this->db->where('id', $invoice_id)->update('mp_invoices', array(
             'paid_amount' => $paid_amount,
             'status' => $status,
         ));
+
+        $this->refresh_term_statuses($invoice_id);
     }
 
     private function normalize_status($invoice)
     {
-        if ((float) $invoice['paid_amount'] >= (float) $invoice['total'] && (float) $invoice['total'] > 0) {
-            return 'paid';
-        }
-
-        if ((float) $invoice['paid_amount'] > 0) {
-            return 'partial';
-        }
-
         if (!empty($invoice['status']) && $invoice['status'] === 'cancelled') {
             return 'cancelled';
         }
 
         if (!empty($invoice['status']) && $invoice['status'] === 'draft') {
             return 'draft';
+        }
+
+        return $this->derive_invoice_status($invoice, (float) $invoice['paid_amount']);
+    }
+
+    public function normalize_terms($terms, $invoice_total, $fallback_due_date)
+    {
+        $normalized = array();
+        foreach ((array) $terms as $index => $term) {
+            if (empty(trim($term['term_label'] ?? '')) && empty($term['amount'])) {
+                continue;
+            }
+
+            $normalized[] = array(
+                'term_label' => trim($term['term_label'] ?? ('Termin ' . ($index + 1))),
+                'amount' => (float) ($term['amount'] ?? 0),
+                'due_date' => !empty($term['due_date']) ? $term['due_date'] : $fallback_due_date,
+                'status' => 'pending',
+                'notes' => trim($term['notes'] ?? ''),
+            );
+        }
+
+        if (empty($normalized)) {
+            $normalized[] = array(
+                'term_label' => 'Pelunasan',
+                'amount' => (float) $invoice_total,
+                'due_date' => $fallback_due_date,
+                'status' => 'pending',
+                'notes' => '',
+            );
+        }
+
+        return $normalized;
+    }
+
+    public function validate_terms($terms, $invoice_total)
+    {
+        if (empty($terms)) {
+            return 'Minimal satu termin pembayaran harus diisi.';
+        }
+
+        $sum = 0;
+        foreach ($terms as $term) {
+            if ($term['amount'] <= 0) {
+                return 'Nominal setiap termin harus lebih besar dari 0.';
+            }
+            if (empty($term['due_date'])) {
+                return 'Setiap termin harus memiliki tanggal jatuh tempo.';
+            }
+            if (empty($term['term_label'])) {
+                return 'Setiap termin harus memiliki label penagihan.';
+            }
+            $sum += (float) $term['amount'];
+        }
+
+        if (abs($sum - (float) $invoice_total) > 0.01) {
+            return 'Total seluruh termin harus sama dengan grand total invoice.';
+        }
+
+        return NULL;
+    }
+
+    public function get_terms($invoice_id)
+    {
+        $terms = $this->db
+            ->order_by('sort_order', 'ASC')
+            ->get_where('mp_invoice_terms', array('invoice_id' => $invoice_id))
+            ->result_array();
+
+        foreach ($terms as &$term) {
+            $sum = $this->db
+                ->select_sum('amount')
+                ->where('invoice_term_id', $term['id'])
+                ->get('mp_payments')
+                ->row_array();
+            $term['paid_amount'] = (float) ($sum['amount'] ?? 0);
+            $term['remaining_amount'] = (float) $term['amount'] - $term['paid_amount'];
+            $term['status'] = $this->derive_term_status($term);
+        }
+
+        return $terms;
+    }
+
+    private function refresh_term_statuses($invoice_id)
+    {
+        $terms = $this->get_terms($invoice_id);
+        foreach ($terms as $term) {
+            $this->db->where('id', $term['id'])->update('mp_invoice_terms', array(
+                'status' => $term['status'],
+            ));
+        }
+    }
+
+    private function derive_term_status($term)
+    {
+        $paid = (float) ($term['paid_amount'] ?? 0);
+        $amount = (float) ($term['amount'] ?? 0);
+        $due_date = $term['due_date'] ?? NULL;
+
+        if ($paid >= $amount && $amount > 0) {
+            return 'paid';
+        }
+
+        if ($paid > 0) {
+            return 'partial';
+        }
+
+        if (!empty($due_date) && strtotime($due_date) < strtotime(date('Y-m-d'))) {
+            return 'overdue';
+        }
+
+        return 'pending';
+    }
+
+    private function derive_invoice_status($invoice, $paid_amount)
+    {
+        if ($paid_amount >= (float) $invoice['total'] && (float) $invoice['total'] > 0) {
+            return 'paid';
+        }
+
+        if ($paid_amount > 0) {
+            return 'partial';
+        }
+
+        $terms = $this->get_terms($invoice['id']);
+        foreach ($terms as $term) {
+            if ($term['status'] === 'overdue') {
+                return 'overdue';
+            }
         }
 
         if (!empty($invoice['due_date']) && strtotime($invoice['due_date']) < strtotime(date('Y-m-d'))) {

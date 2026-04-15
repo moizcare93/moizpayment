@@ -29,6 +29,7 @@ class Finance extends Authenticated_Controller
                 $payload = array(
                     'payment_code' => 'PAY-' . date('YmdHis'),
                     'invoice_id' => $this->input->post('invoice_id') ?: NULL,
+                    'invoice_term_id' => $this->input->post('invoice_term_id') ?: NULL,
                     'client_id' => $this->input->post('client_id') ?: NULL,
                     'category_id' => NULL,
                     'amount' => (float) $this->input->post('amount'),

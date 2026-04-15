@@ -246,6 +246,30 @@ $verification_payload = "Invoice Verification\n"
             overflow: hidden;
         }
 
+        .terms-wrap {
+            margin-top: 12px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .terms-wrap thead th {
+            background: #fdf7ec;
+            padding: 8px 10px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #74512a;
+            text-align: left;
+        }
+
+        .terms-wrap tbody td {
+            padding: 7px 10px;
+            border-top: 1px solid #f2e6d2;
+            font-size: 10px;
+            line-height: 1.28;
+        }
+
         .items-wrap thead th {
             background: #f6f9fd;
             padding: 8px 10px;
@@ -502,6 +526,38 @@ $verification_payload = "Invoice Verification\n"
                     </tbody>
                 </table>
             </section>
+
+            <?php if (!empty($invoice['terms'])): ?>
+                <section class="terms-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Termin Penagihan</th>
+                                <th>Jatuh Tempo</th>
+                                <th class="num">Nominal</th>
+                                <th class="num">Terbayar</th>
+                                <th class="num">Sisa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($invoice['terms'] as $term): ?>
+                                <tr>
+                                    <td>
+                                        <strong><?= html_escape($term['term_label']); ?></strong>
+                                        <?php if (!empty($term['notes'])): ?>
+                                            <div class="small-meta"><?= html_escape($term['notes']); ?></div>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= app_date($term['due_date']); ?></td>
+                                    <td class="num"><?= app_currency($term['amount']); ?></td>
+                                    <td class="num"><?= app_currency($term['paid_amount']); ?></td>
+                                    <td class="num"><?= app_currency($term['remaining_amount']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </section>
+            <?php endif; ?>
 
             <section class="totals-grid">
                 <div>

@@ -26,6 +26,55 @@
         if (grandNode) {
             grandNode.textContent = grandTotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
         }
+
+        const inlineGrandNode = document.querySelector('[data-role="grand-total-inline"]');
+        if (inlineGrandNode) {
+            inlineGrandNode.textContent = grandTotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+        }
+
+        calculateTermTotals();
+    }
+
+    function calculateTermTotals() {
+        let termTotal = 0;
+        document.querySelectorAll('.term-amount').forEach(function (field) {
+            termTotal += parseFloat(field.value || 0);
+        });
+
+        const termNode = document.querySelector('[data-role="term-total"]');
+        if (termNode) {
+            termNode.textContent = termTotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+        }
+    }
+
+    function getGrandTotalNumeric() {
+        let subtotal = 0;
+        document.querySelectorAll('#item-table tbody tr').forEach(function (row) {
+            const qty = parseFloat(row.querySelector('.item-qty')?.value || 0);
+            const price = parseFloat(row.querySelector('.item-price')?.value || 0);
+            const discount = parseFloat(row.querySelector('.item-discount')?.value || 0);
+            subtotal += (qty * price) - ((qty * price) * discount / 100);
+        });
+
+        const discountPercent = parseFloat(document.querySelector('[name="discount_percent"]')?.value || 0);
+        const taxPercent = parseFloat(document.querySelector('[name="tax_percent"]')?.value || 0);
+        const discountAmount = subtotal * discountPercent / 100;
+        return (subtotal - discountAmount) + ((subtotal - discountAmount) * taxPercent / 100);
+    }
+
+    function fillSingleTermWithGrandTotal(force = false) {
+        const fields = document.querySelectorAll('.term-amount');
+        if (fields.length !== 1) {
+            return;
+        }
+
+        const currentValue = parseFloat(fields[0].value || 0);
+        if (!force && currentValue > 0) {
+            return;
+        }
+
+        fields[0].value = getGrandTotalNumeric().toFixed(2);
+        calculateTermTotals();
     }
 
     document.addEventListener('click', function (event) {
@@ -54,11 +103,44 @@
             event.target.closest('tr')?.remove();
             calculateDocumentTotals();
         }
+
+        if (event.target && event.target.id === 'add-term-row') {
+            const tbody = document.querySelector('#term-table tbody');
+            if (!tbody) {
+                return;
+            }
+
+            const index = tbody.querySelectorAll('tr').length;
+            const dueDate = document.querySelector('[name="due_date"]')?.value || '';
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><input type="text" name="terms_schedule[${index}][term_label]" class="form-control" placeholder="DP 1 / Termin 2 / Pelunasan"></td>
+                <td><input type="date" name="terms_schedule[${index}][due_date]" class="form-control" value="${dueDate}"></td>
+                <td><input type="number" step="0.01" name="terms_schedule[${index}][amount]" class="form-control term-amount" value="0"></td>
+                <td><input type="text" name="terms_schedule[${index}][notes]" class="form-control" placeholder="Catatan termin"></td>
+                <td><button type="button" class="btn btn-outline-danger btn-sm remove-term-row">X</button></td>
+            `;
+            tbody.appendChild(row);
+            calculateTermTotals();
+        }
+
+        if (event.target && event.target.classList.contains('remove-term-row')) {
+            event.target.closest('tr')?.remove();
+            calculateTermTotals();
+        }
+
+        if (event.target && event.target.id === 'fill-single-term') {
+            fillSingleTermWithGrandTotal(true);
+        }
     });
 
     document.addEventListener('input', function (event) {
         if (event.target && event.target.classList.contains('calc-trigger')) {
             calculateDocumentTotals();
+        }
+
+        if (event.target && event.target.classList.contains('term-amount')) {
+            calculateTermTotals();
         }
     });
 
@@ -101,4 +183,6 @@
     }
 
     calculateDocumentTotals();
+    calculateTermTotals();
+    fillSingleTermWithGrandTotal(false);
 })();

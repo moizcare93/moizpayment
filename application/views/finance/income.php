@@ -59,6 +59,7 @@
                             <th>Kode</th>
                             <th>Tanggal</th>
                             <th>Invoice</th>
+                            <th>Termin</th>
                             <th>Klien</th>
                             <th>Metode</th>
                             <th>Nominal</th>
@@ -71,6 +72,7 @@
                                 <td><?= html_escape($row['payment_code']); ?></td>
                                 <td><?= app_date($row['payment_date']); ?></td>
                                 <td><?= html_escape($row['invoice_number']); ?></td>
+                                <td><?= html_escape($row['term_label']); ?></td>
                                 <td><?= html_escape($row['client_name']); ?></td>
                                 <td><?= html_escape($row['payment_method']); ?></td>
                                 <td><?= app_currency($row['amount']); ?></td>
