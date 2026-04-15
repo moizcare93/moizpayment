@@ -26,6 +26,10 @@ class Quotation_model extends CI_Model
             ->get_where('mp_quotation_items', array('quotation_id' => $id))
             ->result_array();
 
+        $quotation['client'] = $this->db
+            ->get_where('mp_clients', array('id' => $quotation['client_id']))
+            ->row_array();
+
         return $quotation;
     }
 

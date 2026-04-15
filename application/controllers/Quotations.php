@@ -40,6 +40,20 @@ class Quotations extends Authenticated_Controller
         ));
     }
 
+    public function printable($id)
+    {
+        $quotation = $this->Quotation_model->find($id);
+        if (!$quotation) {
+            show_404();
+        }
+
+        $this->load->view('quotations/print', array(
+            'quotation' => $quotation,
+            'client' => $quotation['client'],
+            'app_settings' => $this->data['app_settings'],
+        ));
+    }
+
     private function save($id = NULL)
     {
         $quotation = $id ? $this->Quotation_model->find($id) : NULL;

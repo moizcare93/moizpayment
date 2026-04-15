@@ -67,6 +67,7 @@ $route['quotations'] = 'quotations/index';
 $route['quotations/create'] = 'quotations/create';
 $route['quotations/edit/(:num)'] = 'quotations/edit/$1';
 $route['quotations/view/(:num)'] = 'quotations/view/$1';
+$route['quotations/print/(:num)'] = 'quotations/printable/$1';
 $route['quotations/delete/(:num)'] = 'quotations/delete/$1';
 $route['quotations/convert/(:num)'] = 'quotations/convert_to_invoice/$1';
 
