@@ -93,7 +93,7 @@ $verification_payload = "Invoice Verification\n"
 
         .hero {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 14px;
             align-items: flex-start;
             padding-bottom: 12px;
@@ -155,20 +155,6 @@ $verification_payload = "Invoice Verification\n"
             font-size: 10px;
             line-height: 1.4;
             white-space: pre-line;
-        }
-
-        .invoice-meta-card {
-            min-width: 205px;
-            padding: 12px 14px;
-            background: linear-gradient(180deg, #f8fbff, #eef4ff);
-            border: 1px solid #d8e4ff;
-            border-radius: 12px;
-        }
-
-        .invoice-number {
-            margin-top: 6px;
-            font-size: 12px;
-            font-weight: 700;
         }
 
         .status-pill {
@@ -449,17 +435,6 @@ $verification_payload = "Invoice Verification\n"
                         <div class="company-meta"><?= html_escape(trim($company_address)); ?>
 <?= html_escape(setting_value($app_settings, 'company_phone', '')); ?><?= setting_value($app_settings, 'company_email', '') ? '  |  ' . html_escape(setting_value($app_settings, 'company_email', '')) : ''; ?></div>
                     </div>
-                </div>
-
-                <div class="invoice-meta-card">
-                    <h2 class="invoice-title">Invoice</h2>
-                    <div class="invoice-number"><?= html_escape($invoice['invoice_number']); ?></div>
-                    <div class="small-meta">
-                        Tanggal terbit: <?= app_date($invoice['invoice_date']); ?><br>
-                        Jatuh tempo: <?= app_date($invoice['due_date']); ?><br>
-                        Status pembayaran: <?= ucfirst($invoice['status']); ?>
-                    </div>
-                    <div class="status-pill status-<?= html_escape($invoice['status']); ?>"><?= strtoupper(html_escape($invoice['status'])); ?></div>
                 </div>
             </section>
 
