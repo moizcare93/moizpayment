@@ -44,6 +44,7 @@ $verification_payload = "Invoice Verification\n"
         body {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
             background: var(--bg);
             color: var(--ink);
             -webkit-print-color-adjust: exact;
@@ -51,9 +52,9 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .print-shell {
-            max-width: 860px;
-            margin: 18px auto;
-            padding: 0 10px;
+            max-width: 820px;
+            margin: 12px auto;
+            padding: 0 8px;
         }
 
         .print-toolbar {
@@ -76,8 +77,8 @@ $verification_payload = "Invoice Verification\n"
 
         .invoice-paper {
             background: var(--paper);
-            border-radius: 18px;
-            box-shadow: 0 18px 48px rgba(22, 31, 50, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(22, 31, 50, 0.08);
             overflow: hidden;
         }
 
@@ -87,28 +88,28 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .invoice-body {
-            padding: 24px 28px 28px;
+            padding: 18px 20px 20px;
         }
 
         .hero {
             display: flex;
             justify-content: space-between;
-            gap: 18px;
+            gap: 14px;
             align-items: flex-start;
-            padding-bottom: 18px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--line);
         }
 
         .identity {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: flex-start;
         }
 
         .logo-box {
-            width: 58px;
-            height: 58px;
-            border-radius: 14px;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
             background: var(--accent-soft);
             display: flex;
             align-items: center;
@@ -124,24 +125,24 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .logo-fallback {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--accent);
         }
 
         .eyebrow {
             color: var(--muted);
-            font-size: 10px;
+            font-size: 9px;
             text-transform: uppercase;
-            letter-spacing: 0.16em;
-            margin-bottom: 5px;
+            letter-spacing: 0.14em;
+            margin-bottom: 4px;
             font-weight: 700;
         }
 
         .company-name,
         .invoice-title {
             margin: 0;
-            font-size: 22px;
+            font-size: 18px;
             line-height: 1;
             letter-spacing: -0.03em;
         }
@@ -149,33 +150,33 @@ $verification_payload = "Invoice Verification\n"
         .company-meta,
         .invoice-meta,
         .small-meta {
-            margin-top: 8px;
+            margin-top: 6px;
             color: var(--muted);
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.4;
             white-space: pre-line;
         }
 
         .invoice-meta-card {
-            min-width: 220px;
-            padding: 16px 18px;
+            min-width: 205px;
+            padding: 12px 14px;
             background: linear-gradient(180deg, #f8fbff, #eef4ff);
             border: 1px solid #d8e4ff;
-            border-radius: 16px;
+            border-radius: 12px;
         }
 
         .invoice-number {
-            margin-top: 8px;
-            font-size: 14px;
+            margin-top: 6px;
+            font-size: 12px;
             font-weight: 700;
         }
 
         .status-pill {
             display: inline-block;
-            margin-top: 10px;
-            padding: 5px 10px;
+            margin-top: 8px;
+            padding: 4px 8px;
             border-radius: 999px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -191,58 +192,58 @@ $verification_payload = "Invoice Verification\n"
         .info-grid {
             display: grid;
             grid-template-columns: 1.05fr 0.95fr;
-            gap: 16px;
-            margin-top: 18px;
+            gap: 12px;
+            margin-top: 12px;
         }
 
         .info-card {
             border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 14px 16px;
-            min-height: 126px;
+            border-radius: 10px;
+            padding: 10px 12px;
+            min-height: 102px;
         }
 
         .info-card h3 {
-            margin: 0 0 10px;
-            font-size: 10px;
+            margin: 0 0 8px;
+            font-size: 9px;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
         .bill-name {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .meta-list {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 8px;
-            margin-top: 6px;
+            gap: 6px;
+            margin-top: 4px;
         }
 
         .meta-row {
             border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 9px 11px;
+            border-radius: 8px;
+            padding: 7px 9px;
             background: #fbfcfe;
             display: flex;
             justify-content: space-between;
-            gap: 12px;
+            gap: 8px;
             align-items: baseline;
         }
 
         .meta-row span {
             color: var(--muted);
-            font-size: 9px;
+            font-size: 8px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
 
         .meta-row strong {
-            font-size: 11px;
+            font-size: 10px;
             line-height: 1.2;
             text-align: right;
         }
@@ -253,16 +254,16 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .items-wrap {
-            margin-top: 18px;
+            margin-top: 12px;
             border: 1px solid var(--line);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
         }
 
         .items-wrap thead th {
             background: #f6f9fd;
-            padding: 10px 12px;
-            font-size: 10px;
+            padding: 8px 10px;
+            font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #4b5870;
@@ -270,11 +271,11 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .items-wrap tbody td {
-            padding: 9px 12px;
+            padding: 7px 10px;
             border-top: 1px solid #eef2f7;
-            font-size: 11px;
+            font-size: 10px;
             vertical-align: top;
-            line-height: 1.35;
+            line-height: 1.28;
         }
 
         .items-wrap td.num,
@@ -285,14 +286,14 @@ $verification_payload = "Invoice Verification\n"
 
         .desc-title {
             font-weight: 700;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .totals-grid {
             display: grid;
             grid-template-columns: 1fr 320px;
-            gap: 16px;
-            margin-top: 18px;
+            gap: 12px;
+            margin-top: 12px;
             align-items: start;
         }
 
@@ -301,16 +302,16 @@ $verification_payload = "Invoice Verification\n"
         .bank-card,
         .trust-card {
             border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 10px 12px;
         }
 
         .notes-card h3,
         .totals-card h3,
         .bank-card h3,
         .trust-card h3 {
-            margin: 0 0 9px;
-            font-size: 10px;
+            margin: 0 0 7px;
+            font-size: 9px;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--muted);
@@ -321,37 +322,37 @@ $verification_payload = "Invoice Verification\n"
         .trust-card p {
             margin: 0;
             color: #344054;
-            font-size: 11px;
-            line-height: 1.55;
+            font-size: 10px;
+            line-height: 1.45;
             white-space: pre-line;
         }
 
         .signatory {
-            margin-top: 14px;
-            padding-top: 10px;
+            margin-top: 10px;
+            padding-top: 8px;
             border-top: 1px dashed var(--line-strong);
             display: grid;
-            grid-template-columns: 1fr 92px;
-            gap: 14px;
+            grid-template-columns: 1fr 78px;
+            gap: 10px;
             align-items: center;
         }
 
         .sign-name {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .sign-role {
             color: var(--muted);
-            font-size: 10px;
+            font-size: 9px;
         }
 
         .qr-box {
-            width: 92px;
-            height: 92px;
+            width: 78px;
+            height: 78px;
             border: 1px solid var(--line-strong);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -361,20 +362,20 @@ $verification_payload = "Invoice Verification\n"
 
         .qr-box canvas,
         .qr-box img {
-            width: 80px !important;
-            height: 80px !important;
+            width: 68px !important;
+            height: 68px !important;
         }
 
         .totals-table td {
-            padding: 7px 0;
+            padding: 6px 0;
             border-bottom: 1px solid #edf1f6;
-            font-size: 11px;
+            font-size: 10px;
         }
 
         .totals-table tr:last-child td {
             border-bottom: 0;
-            padding-top: 10px;
-            font-size: 15px;
+            padding-top: 8px;
+            font-size: 12px;
             font-weight: 700;
         }
 
@@ -383,11 +384,11 @@ $verification_payload = "Invoice Verification\n"
         }
 
         .footer-band {
-            margin-top: 18px;
-            padding-top: 12px;
+            margin-top: 12px;
+            padding-top: 10px;
             border-top: 1px solid var(--line);
             color: var(--muted);
-            font-size: 10px;
+            font-size: 9px;
             display: flex;
             justify-content: space-between;
             gap: 12px;
@@ -395,7 +396,7 @@ $verification_payload = "Invoice Verification\n"
 
         @page {
             size: A4;
-            margin: 8mm;
+            margin: 6mm;
         }
 
         @media print {
@@ -419,7 +420,7 @@ $verification_payload = "Invoice Verification\n"
             }
 
             .invoice-body {
-                padding: 14px 16px 16px;
+                padding: 10px 12px 12px;
             }
         }
     </style>
@@ -451,7 +452,6 @@ $verification_payload = "Invoice Verification\n"
                 </div>
 
                 <div class="invoice-meta-card">
-                    <div class="eyebrow">Tax Invoice</div>
                     <h2 class="invoice-title">Invoice</h2>
                     <div class="invoice-number"><?= html_escape($invoice['invoice_number']); ?></div>
                     <div class="small-meta">
@@ -580,7 +580,7 @@ Mohon cantumkan nomor invoice <?= html_escape($invoice['invoice_number']); ?> pa
                                 <div class="sign-name"><?= html_escape($collector_name); ?></div>
                                 <div class="sign-role"><?= html_escape($collector_title); ?></div>
                             </div>
-                            <div class="qr-box" id="invoice-qrcode"></div>
+                            <div class="qr-box"><canvas id="invoice-qrcode"></canvas></div>
                         </div>
                     </div>
                 </div>
