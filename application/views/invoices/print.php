@@ -41,63 +41,64 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .print-shell {
-            max-width: 960px;
-            margin: 32px auto;
-            padding: 0 16px;
+            max-width: 860px;
+            margin: 18px auto;
+            padding: 0 10px;
         }
 
         .print-toolbar {
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             gap: 10px;
         }
 
         .print-toolbar button {
             border: 0;
             border-radius: 999px;
-            padding: 10px 18px;
+            padding: 8px 16px;
             background: var(--accent);
             color: #fff;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
         }
 
         .invoice-paper {
             background: var(--paper);
-            border-radius: 24px;
-            box-shadow: 0 28px 80px rgba(22, 31, 50, 0.12);
+            border-radius: 18px;
+            box-shadow: 0 18px 48px rgba(22, 31, 50, 0.1);
             overflow: hidden;
         }
 
         .invoice-topbar {
-            height: 10px;
+            height: 7px;
             background: linear-gradient(90deg, #1d4ed8, #0f9f6e);
         }
 
         .invoice-body {
-            padding: 42px 46px 48px;
+            padding: 24px 28px 28px;
         }
 
         .hero {
             display: flex;
             justify-content: space-between;
-            gap: 28px;
+            gap: 18px;
             align-items: flex-start;
-            padding-bottom: 28px;
+            padding-bottom: 18px;
             border-bottom: 1px solid var(--line);
         }
 
         .identity {
             display: flex;
-            gap: 18px;
+            gap: 12px;
             align-items: flex-start;
         }
 
         .logo-box {
-            width: 76px;
-            height: 76px;
-            border-radius: 20px;
+            width: 58px;
+            height: 58px;
+            border-radius: 14px;
             background: var(--accent-soft);
             display: flex;
             align-items: center;
@@ -113,24 +114,24 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .logo-fallback {
-            font-size: 28px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--accent);
         }
 
         .eyebrow {
             color: var(--muted);
-            font-size: 12px;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.18em;
-            margin-bottom: 8px;
+            letter-spacing: 0.16em;
+            margin-bottom: 5px;
             font-weight: 700;
         }
 
         .company-name,
         .invoice-title {
             margin: 0;
-            font-size: 30px;
+            font-size: 22px;
             line-height: 1;
             letter-spacing: -0.03em;
         }
@@ -138,33 +139,33 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         .company-meta,
         .invoice-meta,
         .small-meta {
-            margin-top: 14px;
+            margin-top: 8px;
             color: var(--muted);
-            font-size: 13px;
-            line-height: 1.7;
+            font-size: 11px;
+            line-height: 1.5;
             white-space: pre-line;
         }
 
         .invoice-meta-card {
-            min-width: 280px;
-            padding: 24px 26px;
+            min-width: 220px;
+            padding: 16px 18px;
             background: linear-gradient(180deg, #f8fbff, #eef4ff);
             border: 1px solid #d8e4ff;
-            border-radius: 22px;
+            border-radius: 16px;
         }
 
         .invoice-number {
-            margin-top: 12px;
-            font-size: 18px;
+            margin-top: 8px;
+            font-size: 14px;
             font-weight: 700;
         }
 
         .status-pill {
             display: inline-block;
-            margin-top: 14px;
-            padding: 7px 12px;
+            margin-top: 10px;
+            padding: 5px 10px;
             border-radius: 999px;
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -180,56 +181,56 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         .info-grid {
             display: grid;
             grid-template-columns: 1.05fr 0.95fr;
-            gap: 24px;
-            margin-top: 28px;
+            gap: 16px;
+            margin-top: 18px;
         }
 
         .info-card {
             border: 1px solid var(--line);
-            border-radius: 20px;
-            padding: 22px 24px;
-            min-height: 168px;
+            border-radius: 14px;
+            padding: 14px 16px;
+            min-height: 126px;
         }
 
         .info-card h3 {
-            margin: 0 0 16px;
-            font-size: 13px;
-            letter-spacing: 0.16em;
+            margin: 0 0 10px;
+            font-size: 10px;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--muted);
         }
 
         .bill-name {
-            font-size: 22px;
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .summary-strip {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-top: 22px;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .summary-item {
             border: 1px solid var(--line);
-            border-radius: 18px;
-            padding: 16px 18px;
+            border-radius: 12px;
+            padding: 10px 11px;
             background: #fbfcfe;
         }
 
         .summary-item span {
             display: block;
             color: var(--muted);
-            font-size: 12px;
+            font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
         }
 
         .summary-item strong {
-            font-size: 22px;
+            font-size: 14px;
             line-height: 1.2;
         }
 
@@ -239,16 +240,16 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .items-wrap {
-            margin-top: 28px;
+            margin-top: 18px;
             border: 1px solid var(--line);
-            border-radius: 22px;
+            border-radius: 16px;
             overflow: hidden;
         }
 
         .items-wrap thead th {
             background: #f6f9fd;
-            padding: 14px 16px;
-            font-size: 12px;
+            padding: 10px 12px;
+            font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: #4b5870;
@@ -256,10 +257,11 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .items-wrap tbody td {
-            padding: 16px;
+            padding: 9px 12px;
             border-top: 1px solid #eef2f7;
-            font-size: 14px;
+            font-size: 11px;
             vertical-align: top;
+            line-height: 1.35;
         }
 
         .items-wrap td.num,
@@ -270,14 +272,14 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
 
         .desc-title {
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .totals-grid {
             display: grid;
             grid-template-columns: 1fr 320px;
-            gap: 24px;
-            margin-top: 28px;
+            gap: 16px;
+            margin-top: 18px;
             align-items: start;
         }
 
@@ -285,16 +287,16 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         .totals-card,
         .bank-card {
             border: 1px solid var(--line);
-            border-radius: 20px;
-            padding: 22px 24px;
+            border-radius: 14px;
+            padding: 14px 16px;
         }
 
         .notes-card h3,
         .totals-card h3,
         .bank-card h3 {
-            margin: 0 0 14px;
-            font-size: 13px;
-            letter-spacing: 0.16em;
+            margin: 0 0 9px;
+            font-size: 10px;
+            letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--muted);
         }
@@ -303,20 +305,21 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         .bank-card p {
             margin: 0;
             color: #344054;
-            line-height: 1.75;
+            font-size: 11px;
+            line-height: 1.55;
             white-space: pre-line;
         }
 
         .totals-table td {
-            padding: 10px 0;
+            padding: 7px 0;
             border-bottom: 1px solid #edf1f6;
-            font-size: 14px;
+            font-size: 11px;
         }
 
         .totals-table tr:last-child td {
             border-bottom: 0;
-            padding-top: 16px;
-            font-size: 19px;
+            padding-top: 10px;
+            font-size: 15px;
             font-weight: 700;
         }
 
@@ -325,19 +328,19 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
         }
 
         .footer-band {
-            margin-top: 28px;
-            padding-top: 18px;
+            margin-top: 18px;
+            padding-top: 12px;
             border-top: 1px solid var(--line);
             color: var(--muted);
-            font-size: 12px;
+            font-size: 10px;
             display: flex;
             justify-content: space-between;
-            gap: 18px;
+            gap: 12px;
         }
 
         @page {
             size: A4;
-            margin: 12mm;
+            margin: 8mm;
         }
 
         @media print {
@@ -358,6 +361,10 @@ $balance_due = (float) $invoice['total'] - (float) $invoice['paid_amount'];
             .invoice-paper {
                 box-shadow: none;
                 border-radius: 0;
+            }
+
+            .invoice-body {
+                padding: 14px 16px 16px;
             }
         }
     </style>
